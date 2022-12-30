@@ -1,4 +1,4 @@
-#include "trie_search.h"
+#include "TrieSearch.h"
 
 using namespace std;
 #define no_of_args 5
@@ -11,14 +11,12 @@ int main(int argc, char **argv){
     }
 
     int line_counter = 0;
-    int max_length = -1;
+    int max_line_length = -1;
     int k = atoi(argv[4]);
 
-    FILE* file = fopen(argv[2], "r");
-    if(file==NULL){
-        cout << "Error opening file\n";
+    if(read_sizes(&line_counter, &max_line_length, argv[2])==-1){
+        exit(1);
     }
-    fclose(file);
 
     return 0;
 }
