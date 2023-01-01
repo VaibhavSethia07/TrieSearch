@@ -53,14 +53,30 @@ int read_sizes(int* line_counter, int* max_line_length, char* docfile){
     return 1;
 }
 
-int read_input(Storage* storage, char* docfile){
+void split(char* tmp,int id, Trie* trie,Storage* storage){
+    char *token;
+    int count = 0;
+    token = strtok(tmp, " \t");
+
+    while(token!=NULL){
+        count++;
+        trie->insert(token, id);
+        token = strtok(NULL, "\t");
+    }
+
+    storage->set_length(id, count);
+    free(token);
+}
+
+int read_input(Storage* storage, Trie* trie,char* docfile){
 
     FILE* file = fopen(docfile, "r");
 
     char* line = NULL;
     size_t line_buffer = 0;
-
-    for (int i = 0; i < storage->get_size();i++){
+    char* tmp = (char*)malloc(storage->get_buffer_size() * sizeof(char));
+    for (int i = 0; i < storage->get_size(); i++)
+    {
         getline(&line, &line_buffer, file);
 
         if(storage->insert(line,i)==-1){
@@ -69,6 +85,8 @@ int read_input(Storage* storage, char* docfile){
             fclose(file);
             return -1;
         }
+        strcpy(tmp, storage->get_document(i));
+        split(tmp, i, trie, storage);
         free(line);
         line = NULL;
         line_buffer = 0;

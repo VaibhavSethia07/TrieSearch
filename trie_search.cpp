@@ -19,16 +19,14 @@ int main(int argc, char **argv){
     
 
     Storage *storage = new Storage(line_counter, max_line_length);
-    if(read_input(storage, argv[2])==-1){
+    Trie* trie = new Trie();
+    if (read_input(storage, trie,argv[2]) == -1){
         delete (storage);
         exit(1);
     }
 
-    for (int i = 0; i < storage->get_size();i++){
-        storage->print(i);
-    }
-
-        delete (storage);
+    delete (storage);
+    delete (trie);
     return 0;
 }
 
